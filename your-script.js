@@ -1,23 +1,38 @@
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 camera.position.set(10, 10, 10);
-
-const ambientLight = new THREE.AmbientLight(0x404040, 1.0);
+// Adjust the ambient light intensity
+const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+// Add a directional light with a softer intensity
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
 directionalLight.position.set(1, 1, 1);
 scene.add(directionalLight);
 
+// Add one or more spotlights or point lights to highlight specific areas
+const spotlight = new THREE.SpotLight(0xffffff, 0.8);
+spotlight.position.set(0, 10, 0);
+spotlight.angle = Math.PI / 4;
+spotlight.penumbra = 0.1;
+spotlight.decay = 2;
+spotlight.distance = 50;
+spotlight.castShadow = true;
+scene.add(spotlight);
 const loader = new THREE.GLTFLoader();
 let currentScene = null;
 const availableScenes = [];
 
-loader.load('house.glb', function (gltf) {
+loader.load("house.glb", function (gltf) {
   availableScenes.length = 0;
   gltf.scenes.forEach((scene) => availableScenes.push(scene));
 
@@ -25,15 +40,9 @@ loader.load('house.glb', function (gltf) {
   loadScene(0);
 });
 
-const controls = new THREE.PointerLockControls(camera, document.body);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 function animate() {
-  const delta = clock.getDelta();
-
-  velocity.copy(moveForward).add(moveRight).normalize().multiplyScalar(speed * delta);
-  controls.moveRight(velocity.x);
-  controls.moveForward(velocity.z);
-
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 }
@@ -48,55 +57,9 @@ function loadScene(sceneIndex) {
   scene.add(currentScene);
 }
 
-document.getElementById('scene-selector').addEventListener('change', (event) => {
-  const sceneIndex = parseInt(event.target.value, 10);
-  loadScene(sceneIndex);
-});
-
-renderer.domElement.addEventListener('click', () => {
-  controls.lock();
-});
-
-controls.addEventListener('lock', () => {
-  // Hide any UI elements when pointer lock is enabled
-});
-
-controls.addEventListener('unlock', () => {
-  // Show any UI elements when pointer lock is disabled
-});
-
-const moveForward = new THREE.Vector3();
-const moveRight = new THREE.Vector3();
-const velocity = new THREE.Vector3();
-const speed = 5;
-const clock = new THREE.Clock();
-
-document.addEventListener('keydown', (event) => {
-  switch (event.code) {
-    case 'KeyW':
-      moveForward.set(1, 0, 0);
-      break;
-    case 'KeyS':
-      moveForward.set(-1, 0, 0);
-      break;
-    case 'KeyA':
-      moveRight.set(0, 0, 1);
-      break;
-    case 'KeyD':
-      moveRight.set(0, 0, -1);
-      break;
-  }
-});
-
-document.addEventListener('keyup', (event) => {
-  switch (event.code) {
-    case 'KeyW':
-    case 'KeyS':
-      moveForward.set(0, 0, 0);
-      break;
-    case 'KeyA':
-    case 'KeyD':
-      moveRight.set(0, 0, 0);
-      break;
-  }
-});
+document
+  .getElementById("scene-selector")
+  .addEventListener("change", (event) => {
+    const sceneIndex = parseInt(event.target.value, 10);
+    loadScene(sceneIndex);
+  });
