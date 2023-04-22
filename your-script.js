@@ -6,6 +6,7 @@ const camera = new THREE.PerspectiveCamera(
   1000
 );
 const renderer = new THREE.WebGLRenderer();
+
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -32,13 +33,16 @@ const loader = new THREE.GLTFLoader();
 let currentScene = null;
 const availableScenes = [];
 
-loader.load("house.glb", function (gltf) {
-  availableScenes.length = 0;
-  gltf.scenes.forEach((scene) => availableScenes.push(scene));
+loader.load(
+  "https://interactivehouse.s3.ap-southeast-2.amazonaws.com/house.glb",
+  function (gltf) {
+    availableScenes.length = 0;
+    gltf.scenes.forEach((scene) => availableScenes.push(scene));
 
-  // Load the first scene by default
-  loadScene(0);
-});
+    // Load the first scene by default
+    loadScene(0);
+  }
+);
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
