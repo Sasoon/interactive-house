@@ -5,7 +5,8 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -49,6 +50,16 @@ loader.load(
 );
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+// Use post-processing effects to enhance the visual quality
+const composer = new THREE.EffectComposer(renderer);
+const renderPass = new THREE.RenderPass(scene, camera);
+composer.addPass(renderPass);
+const bloomPass = new THREE.BloomPass(1.0, 25, 4, 256);
+composer.addPass(bloomPass);
+const filmPass = new THREE.FilmPass(0.3, 0.05, 1000, false);
+filmPass.renderToScreen = true;
+composer.addPass(filmPass);
 
 function animate() {
   requestAnimationFrame(animate);
