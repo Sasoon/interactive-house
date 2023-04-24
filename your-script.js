@@ -10,25 +10,29 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-camera.position.set(10, 10, 10);
-// Adjust the ambient light intensity
-const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+// Set up camera and controls
+camera.position.set(0, 1, 3);
+
+// Add atmospheric lighting to the scene
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.6);
+scene.add(hemiLight);
+
+// Add ambient lighting to the scene
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(ambientLight);
 
-// Add a directional light with a softer intensity
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-directionalLight.position.set(1, 1, 1);
-scene.add(directionalLight);
+// Add directional lighting to the scene
+const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+dirLight.position.set(-1, 2, 4);
+dirLight.castShadow = true;
+dirLight.shadow.mapSize.width = 2048;
+dirLight.shadow.mapSize.height = 2048;
+scene.add(dirLight);
 
-// Add one or more spotlights or point lights to highlight specific areas
-const spotlight = new THREE.SpotLight(0xffffff, 0.8);
-spotlight.position.set(0, 10, 0);
-spotlight.angle = Math.PI / 4;
-spotlight.penumbra = 0.1;
-spotlight.decay = 2;
-spotlight.distance = 50;
-spotlight.castShadow = true;
-scene.add(spotlight);
+// Enable shadows for objects that receive shadows
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
 const loader = new THREE.GLTFLoader();
 let currentScene = null;
 const availableScenes = [];
