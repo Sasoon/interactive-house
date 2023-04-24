@@ -14,16 +14,16 @@ document.body.appendChild(renderer.domElement);
 camera.position.set(0, 1, 3);
 
 // Add atmospheric lighting to the scene
-const hemiLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.6);
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0x000000, 6);
 scene.add(hemiLight);
 
 // Add ambient lighting to the scene
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+const ambientLight = new THREE.AmbientLight(0xffffff, 3);
 scene.add(ambientLight);
 
 // Add directional lighting to the scene
-const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-dirLight.position.set(-1, 2, 4);
+const dirLight = new THREE.DirectionalLight(0xffffff, 11);
+dirLight.position.set(50, 100, 20);
 dirLight.castShadow = true;
 dirLight.shadow.mapSize.width = 2048;
 dirLight.shadow.mapSize.height = 2048;
