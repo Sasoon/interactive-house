@@ -1,10 +1,13 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
 
 const renderer = new THREE.WebGLRenderer();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const controls = new OrbitControls(camera, renderer.domElement);
+
 
 // Define your scenes
 const scene1 = new THREE.Scene();
@@ -36,12 +39,12 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 // Set up camera and controls
 camera.position.set(0, 1, 3);
-const controls = new OrbitControls(camera, renderer.domElement);
 
 // Load GLB model
 const loader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath( '/node_modules/three/examples/jsm/libs/draco/' ); // Set path to the Draco decoder
+dracoLoader.setDecoderConfig({ type: 'js' });
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
 loader.setDRACOLoader( dracoLoader ); // Pass the DRACOLoader instance to the GLTFLoader
 loader.load('https://interactivehouse.s3.ap-southeast-2.amazonaws.com/house.glb', (gltf) => {
     scene1.add(gltf.scenes[0]); // Add the first scene from the GLTF file to the first THREE.Scene object
