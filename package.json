@@ -1,0 +1,26 @@
+{
+    "type": "module",
+    "name": "interactive-house",
+    "version": "1.0.0",
+    "description": "",
+    "main": "your-script.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Sasoon/interactive-house.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Sasoon/interactive-house/issues"
+    },
+    "homepage": "https://github.com/Sasoon/interactive-house#readme",
+    "dependencies": {
+        "three": "^0.151.3"
+    },
+    "devDependencies": {
+        "vite": "^4.3.1"
+    }
+}
