@@ -1,9 +1,12 @@
-// vite.config.js
-export default ({
+import { defineConfig } from 'vite';
+
+export default defineConfig({
   build: {
     outDir: 'dist',
+    assetsDir: 'assets',
     rollupOptions: {
-      // https://rollupjs.org/configuration-options/
-    },
-  },
-})
+      input: 'index.html'
+    }
+  }
+});
+
