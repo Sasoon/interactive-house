@@ -3,7 +3,7 @@
     "name": "interactive-house",
     "version": "1.0.0",
     "description": "",
-    "main": "your-script.js",
+    "main": "main.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -18,9 +18,10 @@
     },
     "homepage": "https://github.com/Sasoon/interactive-house#readme",
     "dependencies": {
-        "three": "^0.151.3"
+        "three": "^0.151.3",
+        "vite": "^4.3.1"
     },
     "devDependencies": {
-        "vite": "^4.3.1"
+        
     }
 }
