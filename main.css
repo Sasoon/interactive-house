@@ -41,3 +41,20 @@ select {
   color: #ffffff;
   pointer-events: none;
 }
+
+
+    #loading-bar-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      height: 20px;
+      background-color: #ccc;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0;
+      background-color: #4caf50;
+    }

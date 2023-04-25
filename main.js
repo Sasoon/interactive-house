@@ -41,14 +41,33 @@ const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderConfig({ type: 'js' });
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
 loader.setDRACOLoader( dracoLoader ); // Pass the DRACOLoader instance to the GLTFLoader
+
+
+
+
+// ... Your other imports and setup code ...
+
 loader.load('https://interactivehouse.s3.ap-southeast-2.amazonaws.com/house.glb', (gltf) => {
-    scene1.add(gltf.scenes[0]); // Add the first scene from the GLTF file to the first THREE.Scene object
-    scene2.add(gltf.scenes[1]); // Add the second scene from the GLTF file to the second THREE.Scene object
+  scene1.add(gltf.scenes[0]); // Add the first child of the root object to the scene
+  scene2.add(gltf.scenes[1]); // Add the second child of the root object to the scene
+  
+  // Hide the loading bar after loading is complete
+  document.getElementById('loading-bar-container').style.display = 'none';
 }, (xhr) => {
-    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+  // Calculate the percentage loaded
+  const percentageLoaded = (xhr.loaded / xhr.total * 100);
+
+  // Update the progress bar width
+  const progressBar = document.getElementById('progress-bar');
+  progressBar.style.width = percentageLoaded + '%';
 }, (error) => {
-    console.error(error);
+  console.error(error);
 });
+
+// ... The rest of your code ...
+
+
+
 
 const sceneSelect = document.querySelector('#scene-select');
 sceneSelect.addEventListener('change', (event) => {
