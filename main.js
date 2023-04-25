@@ -26,11 +26,6 @@ function addLighting(scene) {
   const directionalLight = new THREE.DirectionalLight(0xffffff, 7);
   directionalLight.position.set(0, 10, 0);
   scene.add(directionalLight);
-
-  // Hemisphere light
-  const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 5);
-  hemisphereLight.position.set(0, 20, 0);
-  scene.add(hemisphereLight);
 }
 
 // Enable shadows for objects that receive shadows
@@ -55,31 +50,12 @@ loader.load('https://interactivehouse.s3.ap-southeast-2.amazonaws.com/house.glb'
     console.error(error);
 });
 
-// Get a reference to the select element
 const sceneSelect = document.querySelector('#scene-select');
-
-// Listen for the change event on the select element
 sceneSelect.addEventListener('change', (event) => {
   const selectedScene = event.target.value;
-  switch (selectedScene) {
-    case '0':
-      // Show scene 1 and hide other scenes
-      currentScene.visible = false;
-      currentScene = scene1;
-      currentScene.visible = true;
-      console.log('scene 1')
-      break;
-    case '1':
-      // Show scene 2 and hide other scenes
-      currentScene.visible = false;
-      currentScene = scene2;
-      currentScene.visible = true;
-      console.log('scene 2')
-      break;
-    // ...
-    default:
-      break;
-  }
+  currentScene.visible = false;
+  currentScene = selectedScene === '0' ? scene1 : scene2;
+  currentScene.visible = true;
 });
 
 function animate() {

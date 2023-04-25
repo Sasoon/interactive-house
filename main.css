@@ -1,0 +1,43 @@
+body { margin: 0; }
+canvas { display: block; }
+
+/* Reset default select styles */
+select {
+  appearance: none;
+  outline: none;
+  box-shadow: none;
+  border: none;
+  background: none;
+}
+
+/* Container for custom select */
+.select-container {
+  position: absolute;
+  margin: 2em;
+  display: inline-block;
+  font-family: Arial, sans-serif;
+}
+
+/* Custom select element */
+.custom-select {
+    display: block;
+    width: 100%;
+    padding: 20px 30px 20px 20px;
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+    background-color: #000;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+/* Arrow icon for custom select */
+.select-container::after {
+  content: '▼';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #ffffff;
+  pointer-events: none;
+}

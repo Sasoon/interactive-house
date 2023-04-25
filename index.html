@@ -3,17 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>3D House Model</title>
-  <style>
-    body { margin: 0; }
-    canvas { display: block; }
-  </style>
+  <link rel="stylesheet" href="main.css">
 </head>
 <body>
-	<select id="scene-select">
-	<option value="0">Scene 1</option>
-	<option value="1">Scene 2</option>
-	<!-- Add more options if you have more scenes -->
-	</select>
+  <div class="select-container">
+    <select id="scene-select" class="custom-select">
+      <option value="0">Scene 1</option>
+      <option value="1">Scene 2</option>
+      <!-- Add more options if you have more scenes -->
+    </select>
+  </div>
   <script type="module" src="main.js"></script>
 </body>
 </html>
