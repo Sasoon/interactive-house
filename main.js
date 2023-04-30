@@ -7,25 +7,22 @@ const renderer = new THREE.WebGLRenderer();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const controls = new OrbitControls(camera, renderer.domElement);
 
-// Define your scenes
 const scene1 = new THREE.Scene();
 const scene2 = new THREE.Scene();
 
-let currentScene = scene1; // Set default scene
+let currentScene = scene1;
 
-// Enable shadows for objects that receive shadows
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.useLegacyLights = true;
 renderer.outputEncoding = THREE.sRGBEncoding;
 
-// Set up the renderer with tone mapping
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.0; // Adjust this value to control the exposure
+renderer.toneMappingExposure = 1.0;
+
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-// Add lighting
 function addLights(scene) {
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
   scene.add(ambientLight);
@@ -45,27 +42,61 @@ function addLights(scene) {
 addLights(scene1);
 addLights(scene2);
 
-// Set up camera and controls
 camera.position.set(0, 1, 3);
 
-// Load GLB model
 const loader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderConfig({ type: 'js' });
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
-loader.setDRACOLoader(dracoLoader); // Pass the DRACOLoader instance to the GLTFLoader
+loader.setDRACOLoader(dracoLoader);
 
 loader.load('https://interactivehouse.s3.ap-southeast-2.amazonaws.com/house.glb', (gltf) => {
-  scene1.add(gltf.scenes[0]); // Add the first child of the root object to the scene
-  scene2.add(gltf.scenes[1]); // Add the second child of the root object to the scene
-  
-  // Hide the loading bar after loading is complete
+  scene1.add(gltf.scenes[0]);
+  scene2.add(gltf.scenes[1]);
+
+  const edgesMaterial = new THREE.LineBasicMaterial({ color: 0x00000 });
+
+  gltf.scenes[0].traverse((child) => {
+    if (child.isMesh) {
+      const edgesGeometry = new THREE.EdgesGeometry(child.geometry, 1);
+      const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+      child.add(edges);
+    }
+  });
+
+  gltf.scenes[1].traverse((child) => {
+    if (child.isMesh) {
+      const edgesGeometry = new THREE.EdgesGeometry(child.geometry, 1);
+      const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+      child.add(edges);
+    }
+  });
+
+  function toggleOutline() {
+  outlineVisible = !outlineVisible;
+
+  gltf.scenes[0].traverse((child) => {
+    if (child.isLine) {
+      child.visible = outlineVisible;
+    }
+  });
+
+  gltf.scenes[1].traverse((child) => {
+    if (child.isLine) {
+      child.visible = outlineVisible;
+    }
+  });
+}
+
+let outlineVisible = true;
+
+
+
+document.getElementById('toggle-outline').addEventListener('click', toggleOutline);
+
   document.getElementById('loading-bar-container').style.display = 'none';
 }, (xhr) => {
-  // Calculate the percentage loaded
   const percentageLoaded = (xhr.loaded / xhr.total * 100);
-
-  // Update the progress bar width
   const progressBar = document.getElementById('progress-bar');
   progressBar.style.width = percentageLoaded + '%';
 }, (error) => {
@@ -73,14 +104,12 @@ loader.load('https://interactivehouse.s3.ap-southeast-2.amazonaws.com/house.glb'
 });
 
 const sceneSelect = document.querySelector('#scene-select');
-sceneSelect.addEventListener('change', handleSceneChange);
-
-function handleSceneChange(event) {
+sceneSelect.addEventListener('change', (event) => {
   const selectedScene = event.target.value;
   currentScene.visible = false;
   currentScene = selectedScene === '0' ? scene1 : scene2;
   currentScene.visible = true;
-}
+});
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
