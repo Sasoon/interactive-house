@@ -75,6 +75,9 @@ dracoLoader.setDecoderConfig({ type: "js" });
 dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
 loader.setDRACOLoader(dracoLoader);
 
+controlsContainer.style.display = "none";
+toggleButton.style.display = "none";
+
 loader.load(
   "https://interactivehouse.s3.ap-southeast-2.amazonaws.com/house.glb",
   (gltf) => {
@@ -122,6 +125,11 @@ loader.load(
       .addEventListener("click", toggleOutline);
 
     document.getElementById("loading-bar-container").style.display = "none";
+
+// Show the controls container and toggle button
+controlsContainer.style.display = "flex";
+toggleButton.style.display = "block";
+
   },
   (xhr) => {
     const percentageLoaded = (xhr.loaded / xhr.total) * 100;
