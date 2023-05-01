@@ -10,13 +10,18 @@ import {
 } from "three/examples/jsm/controls/OrbitControls.js";
 
 const renderer = new THREE.WebGLRenderer();
-const camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.OrthographicCamera(
+    window.innerWidth / -2,
+    window.innerWidth / 2,
+    window.innerHeight / 2,
+    window.innerHeight / -2,
+    .5,
+    1000
+);
 
-// Set the camera position
-camera.position.x = 0;
-camera.position.y = 5;
-camera.position.z = 10;
-
+camera.position.set(0, 0, 10);
+camera.lookAt(new THREE.Vector3(0, 0, 0));
+camera.zoom = 60;
 camera.updateProjectionMatrix();
 
 // Get the modal
