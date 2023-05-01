@@ -10,14 +10,14 @@ import {
 } from "three/examples/jsm/controls/OrbitControls.js";
 
 const renderer = new THREE.WebGLRenderer();
-const camera = new THREE.OrthographicCamera(
-    window.innerWidth / -2,
-    window.innerWidth / 2,
-    window.innerHeight / 2,
-    window.innerHeight / -2,
-    1,
-    1000
-);
+const camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+// Set the camera position
+camera.position.x = 0;
+camera.position.y = 5;
+camera.position.z = 10;
+
+camera.updateProjectionMatrix();
 
 // Get the modal
 const modal = document.getElementById("myModal");
@@ -29,10 +29,6 @@ const span = document.getElementsByClassName("close")[0];
 window.onload = function () {
   modal.style.display = "block";
 };
-
-camera.position.set(0, 0, 10);
-camera.zoom = 50;
-camera.updateProjectionMatrix();
 
 const controls = new OrbitControls(camera, renderer.domElement);
 

@@ -40,10 +40,14 @@ body {
   background-color: #4caf50;
 }
 
+.scene-select-container {
+  width: 100%;
+}
 
 .custom-select {
   appearance: none;
   background-color: transparent;
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
@@ -56,6 +60,7 @@ body {
   border: none;
   border-radius: 5px;
   padding: 10px;
+  width: 100%;
   font-size: 16px;
   font-weight: bold;
   color: #fff;
@@ -73,9 +78,12 @@ body {
     flex-direction: row;
     align-items: center;
   }
+  .scene-select-container, .button {
+    height: 57px;
+  }
 
-  .scene-select-container {
-    margin-right: 10px;
+  #scene-select{
+    height: 100%;
   }
 }
 
