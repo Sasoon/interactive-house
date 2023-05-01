@@ -15,7 +15,7 @@ const camera = new THREE.OrthographicCamera(
     window.innerWidth / 2,
     window.innerHeight / 2,
     window.innerHeight / -2,
-    .5,
+    .1,
     1000
 );
 
