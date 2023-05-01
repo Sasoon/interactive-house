@@ -36,6 +36,7 @@ toggleButton.addEventListener("click", () => {
 
 const scene1 = new THREE.Scene();
 const scene2 = new THREE.Scene();
+const scene3 = new THREE.Scene();
 
 let currentScene = scene1;
 
@@ -51,23 +52,25 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 function addLights(scene) {
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
-  scene.add(ambientLight);
+// Create three point lights
+const pointLight1 = new THREE.PointLight(0xffffff, 0.5);
+const pointLight2 = new THREE.PointLight(0xffffff, 0.5);
+const pointLight3 = new THREE.PointLight(0xffffff, 0.5);
 
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-  directionalLight.position.set(5, 10, 5);
-  directionalLight.target.position.set(0, 0, 0);
-  directionalLight.castShadow = true;
-  directionalLight.shadow.mapSize.width = 512;
-  directionalLight.shadow.mapSize.height = 512;
-  directionalLight.shadow.camera.near = 1;
-  directionalLight.shadow.camera.far = 50;
-  scene.add(directionalLight);
-  scene.add(directionalLight.target);
+// Set the position of the point lights
+pointLight1.position.set(5, 15, 5);
+pointLight2.position.set(-5, 15, 5);
+pointLight3.position.set(0, 15, -5);
+
+// Add the point lights to the scene
+scene.add(pointLight1);
+scene.add(pointLight2);
+scene.add(pointLight3);
 }
 
 addLights(scene1);
 addLights(scene2);
+addLights(scene3);
 
 const loader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
@@ -78,11 +81,18 @@ loader.setDRACOLoader(dracoLoader);
 controlsContainer.style.display = "none";
 toggleButton.style.display = "none";
 
+
 loader.load(
   "https://interactivehouse.s3.ap-southeast-2.amazonaws.com/house.glb",
   (gltf) => {
     scene1.add(gltf.scenes[0]);
     scene2.add(gltf.scenes[1]);
+    scene3.add(gltf.scenes[2]); 
+
+        // Log the object names
+    gltf.scene.traverse((child) => {
+      console.log(child.name);
+    });
 
     const edgesMaterial = new THREE.LineBasicMaterial({ color: 0x00000 });
 
@@ -102,6 +112,14 @@ loader.load(
       }
     });
 
+    gltf.scenes[2].traverse((child) => {
+  if (child.isMesh) {
+    const edgesGeometry = new THREE.EdgesGeometry(child.geometry, 1);
+    const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+    child.add(edges);
+  }
+});
+
     function toggleOutline() {
       outlineVisible = !outlineVisible;
 
@@ -112,6 +130,12 @@ loader.load(
       });
 
       gltf.scenes[1].traverse((child) => {
+        if (child.isLine) {
+          child.visible = outlineVisible;
+        }
+      });
+
+            gltf.scenes[2].traverse((child) => {
         if (child.isLine) {
           child.visible = outlineVisible;
         }
@@ -130,6 +154,27 @@ loader.load(
 controlsContainer.style.display = "flex";
 toggleButton.style.display = "block";
 
+// Function to toggle the visibility of the object named "beams_2"
+function toggleBeamsVisibility(scene) {
+  scene.traverse((child) => {
+    if (child.name === "beams_2") {
+      console.log('ye')
+      child.visible = !child.visible;
+    }
+  });
+}
+
+// Get a reference to the toggle beams button
+const toggleBeamsButton = document.getElementById("toggle-beams");
+
+// Add an event listener to the toggle beams button
+toggleBeamsButton.addEventListener("click", () => {
+  toggleBeamsVisibility(scene1);
+  toggleBeamsVisibility(scene2);
+  toggleBeamsVisibility(scene3);
+});
+
+
   },
   (xhr) => {
     const percentageLoaded = (xhr.loaded / xhr.total) * 100;
@@ -145,7 +190,13 @@ const sceneSelect = document.querySelector("#scene-select");
 sceneSelect.addEventListener("change", (event) => {
   const selectedScene = event.target.value;
   currentScene.visible = false;
-  currentScene = selectedScene === "0" ? scene1 : scene2;
+  if (selectedScene === "0") {
+    currentScene = scene1;
+  } else if (selectedScene === "1") {
+    currentScene = scene2;
+  } else {
+    currentScene = scene3;
+  }
   currentScene.visible = true;
 });
 
