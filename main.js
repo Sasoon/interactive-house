@@ -89,11 +89,6 @@ loader.load(
     scene2.add(gltf.scenes[1]);
     scene3.add(gltf.scenes[2]); 
 
-        // Log the object names
-    gltf.scene.traverse((child) => {
-      console.log(child.name);
-    });
-
     const edgesMaterial = new THREE.LineBasicMaterial({ color: 0x00000 });
 
     gltf.scenes[0].traverse((child) => {
@@ -154,15 +149,14 @@ loader.load(
 controlsContainer.style.display = "flex";
 toggleButton.style.display = "block";
 
-// Function to toggle the visibility of the object named "beams_2"
 function toggleBeamsVisibility(scene) {
   scene.traverse((child) => {
-    if (child.name === "beams_2") {
-      console.log('ye')
+    if (child.name === "beams" || child.name === "beams_1" || child.name === "beams_2") {
       child.visible = !child.visible;
     }
   });
 }
+
 
 // Get a reference to the toggle beams button
 const toggleBeamsButton = document.getElementById("toggle-beams");
